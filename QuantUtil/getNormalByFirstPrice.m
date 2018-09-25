@@ -1,10 +1,12 @@
 function [ close ] = getNormalByFirstPrice( code , start_date, end_date)
-%UNTITLED4 此处显示有关此函数的摘要
+%	code string "600000"
+%   start_date int 20150101
+%   end_date int 20150101
 %   此处显示详细说明
-url = "E:\data\h5data\stock\dayBar\byStock\";
-dividendFile =  'E:\data\static\stock\TushareDividend.csv';
+url = "D:\data\h5data\stock\dayBar\byStock\";
+dividendFile =  "D:\data\static\stock\Tusharedividend\";
 stock = readtable(url+code+".csv" , 'ReadVariableNames', true);
-dividend =readtable(dividendFile, 'ReadVariableNames', true);
+dividend =readtable(dividendFile+code+".csv", 'ReadVariableNames', true);
 if code.startsWith('6')
     symbol = code+".sh";
 else

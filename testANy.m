@@ -1,10 +1,10 @@
 clear;
 
-codeA = "000693";
+codeA = "002371";
 codeB = "000001";
 
-start_date = 20180101;
-end_date = 20180921;
+start_date = 20180207;
+end_date = 20180920;
 
 tradingDay = getTradingDay(start_date, end_date);
 closeA = getNormalByFirstPrice(codeA, start_date, end_date);

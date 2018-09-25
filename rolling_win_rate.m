@@ -1,10 +1,10 @@
 clear;
 
-code = "300296";
+code = "600276";
 control = "000001";
 
-start_date = 20180101;
-end_date = 20180921;
+start_date = 20160101;
+end_date = 20180920;
 
 window = 120;
 tradingDay = getTradingDay(20100101, end_date);
