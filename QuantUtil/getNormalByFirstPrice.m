@@ -6,6 +6,11 @@ function [ close ] = getNormalByFirstPrice( code , start_date, end_date)
 url = "D:\data\h5data\stock\dayBar\byStock\";
 dividendFile =  "D:\data\static\stock\Tusharedividend\";
 stock = readtable(url+code+".csv" , 'ReadVariableNames', true);
+if ~exist(dividendFile+code+".csv")
+    close = [];
+    fprintf('%s dividend file does not exsits\n', code);
+    return
+end
 dividend =readtable(dividendFile+code+".csv", 'ReadVariableNames', true);
 if code.startsWith('6')
     symbol = code+".sh";
@@ -16,6 +21,11 @@ dividend =  dividend(dividend.Symbol==symbol,:);
 RatioAdjustingFactor = dividend.RatioAdjustingFactor(find(dividend.ExdiviDate>=start_date):find(dividend.ExdiviDate<=end_date,1,'last'));
 
 region = find(stock.Date>=start_date):find(stock.Date<=end_date,1,'last');
+if sum(stock.Open(region)==0) > 10
+    fprintf('%s %d-%d期间停牌超过十天\n',code, start_date, end_date);
+    close = [];
+    return
+end
 if isempty(region)
     close =[];
 else if length(region) ~= length(RatioAdjustingFactor)

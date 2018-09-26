@@ -1,9 +1,9 @@
 clear;
 
-codeA = "002371";
+codeA = "600536";
 codeB = "000001";
 
-start_date = 20180207;
+start_date = 20180209;
 end_date = 20180920;
 
 tradingDay = getTradingDay(start_date, end_date);

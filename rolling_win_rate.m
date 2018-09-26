@@ -1,6 +1,6 @@
 clear;
 
-code = "600276";
+code = "601869";
 control = "000001";
 
 start_date = 20160101;
@@ -8,7 +8,7 @@ end_date = 20180920;
 
 window = 120;
 tradingDay = getTradingDay(20100101, end_date);
-tradingDay = tradingDay(find(tradingDay>=start_date)-window:end);
+tradingDay = tradingDay(find(tradingDay>=start_date)-window+1:end);
 %%
 closeA = getNormalByFirstPrice(code,tradingDay(1), end_date);
 closeB = getNormalByFirstIndex(control, tradingDay(1), end_date);
