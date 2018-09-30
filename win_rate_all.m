@@ -1,8 +1,8 @@
 clear;
 folder = dir('D:\data\h5data\stock\dayBar\byStock\');
-start_date = 20180101;
-end_date = 20180920;
-window = 120;
+start_date = 20170420;
+end_date = 20170906;
+window = 100;
 tradingDay = getTradingDay(20100101, end_date);
 tradingDay = tradingDay(find(tradingDay>=start_date)-window+1:end);
 
@@ -12,6 +12,8 @@ max_winrate = [];
 k = 1;
 win_rate = zeros(length(tradingDay)-window+1,length(folder));
 win_earn = zeros(length(tradingDay)-window+1,length(folder));
+win_up = zeros(length(tradingDay)-window+1,length(folder));
+win_down = zeros(length(tradingDay)-window+1,length(folder));
 lost_earn = zeros(length(tradingDay)-window+1,length(folder));
 earn = zeros(length(tradingDay)-window+1,length(folder));
 for j=1:length(folder)
@@ -43,37 +45,49 @@ for j=1:length(folder)
         d = retA-retB;
         
         win_rate(i-window+1, k) = 100* sum((retA-retB>0)) / length(retA);
+        win_up(i-window+1, k) = 100* sum((d>0) & (retB>0)) / sum(retB>0);
+        win_down(i-window+1, k) = 100 * sum((d>0) & retB<0) / sum(retB<0);
+        
         earn(i-window+1,k) = mean(d);
-        win_earn(i-window+1,k) = mean(d(d>0));
-        lost_earn(i-window+1,k) = mean(d(d<0));
+        win_earn(i-window+1,k) = mean(d(retB>0));
+        lost_earn(i-window+1,k) = mean(d(retB<0));
     end
     key{k} = code;
-    min_winrate(k) = min(win_rate(:, j));
-    max_winrate(k) = max(win_rate(:, j));
+    min_winrate(k) = min(win_rate(:, k));
+    max_winrate(k) = max(win_rate(:, k));
     fprintf('%s ¼ÆËãÍê±Ï\n', code);
     k=k+1;
 end
 %%
 
-for i =1 :size(win_rate,1)
-    histogram(win_rate(i,:), [30:0.5:65]);
-    pause(0.5)
-end
+% for i =1 :size(win_rate,1)
+%     histogram(win_rate(i,:), [30:0.5:65]);
+%     pause(0.5)
+% end
 
 %%
-win_rate = win_rate(:,1:k-1);
+key = cell2table(key','VariableNames',{'Symbol'});
+
 earn = earn(:,1:k-1);
 win_earn = win_earn(:,1:k-1);
 lost_earn = lost_earn(:,1:k-1);
+
+win_rate = win_rate(:,1:k-1);
+win_down = win_down(:,1:k-1);
+win_up = win_up(:,1:k-1);
+%%
+
 %%
 sorted = zeros(size(win_rate,1), size(win_rate,2));
 
 for i=1:size(win_rate,1)
-    [B,I] = sort(earn(i,:));
+    [B,I] = sort(earn(i,:),'ascend');
+%     [C,D] = sort(lost_earn(i,:));
+%     [E,F] = sort(I+D);
     sorted(i,:) = I;
 end
 %%
-inter = sorted(1,2000:end);
+inter = sorted(1,2100:end);
 for i=2:size(sorted,1)
-     inter = intersect(sorted(i,2000:end), inter);
+     inter = intersect(sorted(i,2100:end), inter);
 end

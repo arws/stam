@@ -1,13 +1,15 @@
 clear;
 
-codeA = "600536";
+codeA = "000816";
 codeB = "000001";
 
-start_date = 20180209;
-end_date = 20180920;
+start_date = 20170420;
+end_date = 20170920;
 
 tradingDay = getTradingDay(start_date, end_date);
 closeA = getNormalByFirstPrice(codeA, start_date, end_date);
+% closeA = getNormalByFirstIndex(codeA, start_date, end_date);
+% closeB = getNormalByFirstPrice(codeB, start_date, end_date);
 closeB = getNormalByFirstIndex(codeB, start_date, end_date);
 
 %%
@@ -61,6 +63,10 @@ subplot(2,1,2)
 scatter(retA, retB - retA * x(2) + x(1));
 grid on
 %%
+d = retA-retB;
 fprintf('45度线以下比例:%5.2f%%\n', 100* sum((retA-retB>0) / length(retA)))
-
+fprintf('上涨强势比例:%5.2f%%, 超额:%6.5f%% \n',  100 *sum((d>0) & (retB>0)) / sum(retB>0), 100* mean(d(retB>0)))
+fprintf('下跌强势比例:%5.2f%%, 超额:%6.5f%% \n', 100 * sum((d>0) & (retB<0)) / sum(retB<0), 100* mean(d(retB<0)))
+fprintf('B上涨比例:%5.2f%%\n', 100 * sum(retB>0) / length(retB))
+fprintf('B上涨天数:%d,下跌天数:%d,共%d天\n',sum(retB>0), sum(retB<0), length(retB))
 %%
